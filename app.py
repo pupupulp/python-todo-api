@@ -15,6 +15,14 @@ def get_password(username):
 def unauthorized():
 	return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
+@app.errorhandler(404)
+def not_found(error):
+	return make_response(jsonify({'error': 'Not found'}), 404)
+
+@app.errorhandler(400)
+def not_found(error):
+    return make_response(jsonify( { 'error': 'Bad request' } ), 400)	
+
 tasks = [
 	{
 		'id': 1,
@@ -84,10 +92,6 @@ def delete_task(task_id):
         abort(404)
     tasks.remove(task[0])
     return jsonify({'result': True})
-
-@app.errorhandler(404)
-def not_found(error):
-	return make_response(jsonify({'error': 'Not found'}), 404)
 
 def make_public_task(task):
     new_task = {}
