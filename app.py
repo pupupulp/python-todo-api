@@ -1,5 +1,5 @@
 #!flask/bin/python
-from flask import Flask
+from flask import Flask, jsonify, abort
 
 app = Flask(__name__)
 
@@ -11,7 +11,7 @@ tasks = [
 		'done': False
 	},
 	{
-		'id': 1,
+		'id': 2,
 		'title': u'GCP Machine Learning Development',
 		'description': 'Study different application and approach on machine learning for finance systems',
 		'done': False
@@ -19,9 +19,16 @@ tasks = [
 ]
 
 @app.route('/todo/api/v1/tasks', methods = ['GET'])
-
 def get_tasks():
 	return jsonify({'tasks': tasks})
+
+@app.route('/todo/api/v1/tasks/<int:task_id>', methods = ['GET'])
+def get_task(task_id):
+	task = [task for task in tasks if task['id'] == task_id]
+	if len(task) == 0:
+		abort(404)
+	return jsonify({'task': task[0]})
+
 
 if __name__ == '__main__':
 	app.run(debug = True)
