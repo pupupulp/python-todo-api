@@ -142,8 +142,20 @@
             });
 
             self.beginAdd = function() {
-                alert("Add");
+                 $('#add').modal('show');
             }
+
+            self.add = function(task) {
+                self.ajax(self.tasksURI, 'POST', task).done(function(data) {
+                    self.tasks.push({
+                        uri: ko.observable(data.task.uri),
+                        title: ko.observable(data.task.title),
+                        description: ko.observable(data.task.description),
+                        done: ko.observable(data.task.done)
+                    });
+                });
+            }
+            
             self.beginEdit = function(task) {
                 alert("Edit: " + task.title());
             }
